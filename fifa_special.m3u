@@ -1,10 +1,7 @@
 # ==================== TOFFEE FIFA SPECIAL ====================
 
 #EXTINF:-1 group-title="Toffee FIFA 2026" tvg-logo="" tvg-name="FIFA 2026 - HD (Stream 1)",FIFA 2026 - HD (Stream 1)
-https://prod-cdn01-live.toffeelive.com/live/FIFA-2026-2/0/master_3000.m3u8?hdntl=Expires=1782418448~_GO=Generated~URLPrefix=aHR0cHM6Ly9wcm9kLWNkbjAxLWxpdmUudG9mZmVlbGl2ZS5jb20~Signature=AVXEwvdRT5-zu9vLM10GGNwDTI74vk3El3F9bO-ox9LBa3d6MJK1q5dE1dZ_lbNEGUL9o2s0dgdyV68S1IFgE5iwzsYD
+https://prod-cdn01-live.toffeelive.com/live/FIFA-2026/sst/0/master_1500.m3u8?hdntl=Expires=1783450038~_GO=Generated~URLPrefix=aHR0cHM6Ly9wcm9kLWNkbjAxLWxpdmUudG9mZmVlbGl2ZS5jb20~Signature=AWIR_5FEL1k8XhKZ-QdEU8KvbgRBeHsZZuSgByWJTM_ZjxBoQmqaMjhFdipZ-6fYNKkoQseE7-EssOkIg9GV9OQdwkgA
 
 #EXTINF:-1 group-title="Toffee FIFA 2026" tvg-logo="" tvg-name="FIFA 2026 - HD (Stream 2)",FIFA 2026 - HD (Stream 2)
-https://prod-cdn01-live.toffeelive.com/live/FIFA-2026-4/0/master_2000.m3u8?hdntl=Expires=1782287049~_GO=Generated~URLPrefix=aHR0cHM6Ly9wcm9kLWNkbjAxLWxpdmUudG9mZmVlbGl2ZS5jb20~Signature=AVXEwveUIquATxp7U9qRWDundJ4tY6Wt81zwiUKg_M6cokQk8OcgXmtq_uOMonQKGDQFPN5DepdypBkfFM8grz63CDAP
-
-#EXTINF:-1 group-title="Toffee FIFA 2026" tvg-logo="" tvg-name="FIFA 2026 - HD (Stream 3)",FIFA 2026 - HD (Stream 3)
-https://prod-cdn01-live.toffeelive.com/live/FIFA-2026/0/master_1750.m3u8?hdntl=Expires=1782329471~_GO=Generated~URLPrefix=aHR0cHM6Ly9wcm9kLWNkbjAxLWxpdmUudG9mZmVlbGl2ZS5jb20~Signature=AVXEwveZHILkN1HRHURQAcG_GDm3JnPe4JcVO8lbJW1mEBpPM5D0sYLIXCAk-F0ICIrSaWJ0fSUlMgNWhb07CgsYbj4I
+https://pull.niues.live/live/stream-9912060_lhd.m3u8?auth_key=1783284383-0-0-ba541e77b9330eab42075af6aa5029e4
