@@ -6,3 +6,5 @@ https://prod-cdn01-live.toffeelive.com/live/FIFA-2026/sst/0/master_1500.m3u8?hdn
 https://content-aapm1.uplynk.com/2bc03997af1642b198695e9a0ee565da/f.m3u8?pbs=9be58739c6bd4d0bb3da671a12f2c1b2
 #EXTINF:-1 group-title="Toffee FIFA 2026" tvg-logo="" tvg-name=" ALTERNATIVE SERVER",ALTERNATIVE SERVER
 https://pull.niues.live/live/stream-9912060_lhd.m3u8?auth_key=1783284383-0-0-ba541e77b9330eab42075af6aa5029e4
+#EXTINF:-1 group-title="Toffee FIFA 2026" tvg-logo="" tvg-name=" T-Sports ALTERNATIVE SERVER",T-Sports ALTERNATIVE SERVER
+https://bdixserver.tvhunter.top/ant1009/tracks-v1a1/mono.m3u8
