@@ -1,7 +1,7 @@
 # ==================== TOFFEE FIFA SPECIAL ====================
 
 #EXTINF:-1 group-title="Toffee FIFA 2026" tvg-logo="" tvg-name="TOFFEE HD (Recommend)",TOFFEE HD (Recommend)
-https://trophystream.com/cors-proxy/https/prod-cdn01-live.toffeelive.com/live/FIFA-2026-2/sst/0/master_1000.m3u8?hdntl=Expires=1783908454~_GO=Generated~URLPrefix=aHR0cHM6Ly9wcm9kLWNkbjAxLWxpdmUudG9mZmVlbGl2ZS5jb20~Data=eyJzdWJzY3JpYmVyX2lkIjoiY2ZiZmU3Y2QtMDZlMi00NzM0LTgxODQtMGFhZjU0NzRmNjU0In0~Signature=AWIR_5Gie8DN4q9q8WRufJPlqoo9oNCLddJ7XOlbgzc5XSb6DY_lM6S3_8acGjj7RqA4QIiQABrcscco0IKhBTPFLhcA
+https://prod-cdn01-live.toffeelive.com/live/FIFA-2026/sst/0/master_1500.m3u8?hdntl=Expires=1784138990~_GO=Generated~URLPrefix=aHR0cHM6Ly9wcm9kLWNkbjAxLWxpdmUudG9mZmVlbGl2ZS5jb20~Data=eyJzdWJzY3JpYmVyX2lkIjoiMjk2NmI0NzEtNTVlMS00ZWY0LThjNzQtMzdlYjgzMDllMjNjIn0~Signature=AWucVz5zoyFG9GoZWJ5H9TY2PBlU-s6RqOmT0STcs4Pm4gBHlDpjlkPbcI0Qc_eVbi7nkBY3-QcqI8vF2tg_atHaJs4P
 #EXTINF:-1 group-title="Toffee FIFA 2026" tvg-logo="" tvg-name=" ALTERNATIVE SERVER",ALTERNATIVE SERVER (SomoyTV)
 https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8
 #EXTINF:-1 group-title="Toffee FIFA 2026" tvg-logo="" tvg-name=" T-Sports ALTERNATIVE SERVER",T-Sports ALTERNATIVE SERVER
