@@ -1,3 +1,13 @@
 // @vega-provider movieBoxWeb
 // @vega-version 2.7
-"use strict";var __defProp=Object.defineProperty,__getOwnPropDesc=Object.getOwnPropertyDescriptor,__getOwnPropNames=Object.getOwnPropertyNames,__hasOwnProp=Object.prototype.hasOwnProperty,__export=(target,all)=>{for(var name in all)__defProp(target,name,{get:all[name],enumerable:!0})},__copyProps=(to,from,except,desc)=>{if(from&&"object"==typeof from||"function"==typeof from)for(let key of __getOwnPropNames(from))__hasOwnProp.call(to,key)||key===except||__defProp(to,key,{get:()=>from[key],enumerable:!(desc=__getOwnPropDesc(from,key))||desc.enumerable});return to},__toCommonJS=mod=>__copyProps(__defProp({},"__esModule",{value:!0}),mod),catalog_exports={};__export(catalog_exports,{catalog:()=>catalog,genres:()=>genres});var catalog=[{title:"Trending",filter:"/"},{title:"Movies",filter:"/newWeb/movie"},{title:"TV Series",filter:"/newWeb/tv-series"}],genres=[];exports.catalog=catalog,exports.genres=genres;
+"use strict";
+var catalog = [
+  { title: "🔥 Trending Now", filter: "/ranking-list/gA8zZqlP3ga?id=8610422883619422240&page_from=more_SUBJECTS_MOVIE" },
+  { title: "🔥 Cinema", filter: "/ranking-list/yfPrzpXpwM6?id=5692654647815587592&page_from=more_SUBJECTS_MOVIE" },
+  { title: "Trending Bollywood", filter: "/ranking-list/g862TVthEu?id=414907768299210008&page_from=more_SUBJECTS_MOVIE" },
+  { title: "Anime", filter: "/ranking-list/U6n7BTbz43a?id=8434602210994128512&page_from=more_SUBJECTS_MOVIE" },
+  { title: "Top Series", filter: "/newWeb/tv-series" }
+];
+var genres = [];
+exports.catalog = catalog;
+exports.genres = genres;
