@@ -1,0 +1,10 @@
+{
+  "movieBoxWeb": {
+    "name": "MovieBox Web",
+    "url": "https://officialmoviebox.com"
+  },
+  "castle": {
+    "name": "Castle TV",
+    "url": "https://api.hlowb.com"
+  }
+}
