@@ -25,8 +25,6 @@ const defaultUserAgent =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
 const requestHeaders = {
-  // This provider uses the public anonymous API, not a saved website session.
-  // An explicit empty token overrides that cookie in the app's author jar.
   Cookie: "token=",
   Accept: "application/json",
   "User-Agent": defaultUserAgent,
@@ -98,7 +96,7 @@ async function getCaptions(
       const res = await providerContext.axios.get(url, {
         headers,
         signal,
-        timeout: 10000,
+        timeout: 4000, // অপ্টিমাইজড: ১০ সেকেন্ড থেকে ৪ সেকেন্ডে কমানো হয়েছে
         validateStatus: () => true,
       });
       if (res.status >= 200 && res.status < 300) {
@@ -161,7 +159,7 @@ async function fetchPlayData(
       const res = await providerContext.axios.get(playUrl, {
         headers,
         signal,
-        timeout: 15000,
+        timeout: 6000, // অপ্টিমাইজড: ১৫ সেকেন্ড থেকে ৬ সেকেন্ডে কমানো হয়েছে
         validateStatus: () => true,
       });
       if (res.status === 429) {
