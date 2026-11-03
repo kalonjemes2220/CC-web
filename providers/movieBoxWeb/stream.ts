@@ -96,7 +96,7 @@ async function getCaptions(
       const res = await providerContext.axios.get(url, {
         headers,
         signal,
-        timeout: 4000, // অপ্টিমাইজড: ১০ সেকেন্ড থেকে ৪ সেকেন্ডে কমানো হয়েছে
+        timeout: 6000, // ক্যাপশন লোডের জন্য ৬ সেকেন্ড
         validateStatus: () => true,
       });
       if (res.status >= 200 && res.status < 300) {
@@ -137,6 +137,7 @@ function checkPlaybackLimit(result: any): void {
   }
 }
 
+// --- Optimized fetchPlayData with Smart Retry ---
 async function fetchPlayData(
   apiBase: string,
   params: URLSearchParams,
@@ -154,55 +155,66 @@ async function fetchPlayData(
     "User-Agent": ua,
     Referer: refererUrl,
   };
-  try {
-    if (providerContext?.axios) {
-      const res = await providerContext.axios.get(playUrl, {
-        headers,
-        signal,
-        timeout: 6000, // অপ্টিমাইজড: ১৫ সেকেন্ড থেকে ৬ সেকেন্ডে কমানো হয়েছে
-        validateStatus: () => true,
-      });
-      if (res.status === 429) {
+
+  const MAX_RETRIES = 2;
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      if (providerContext?.axios) {
+        const res = await providerContext.axios.get(playUrl, {
+          headers,
+          signal,
+          timeout: 10000, // স্ট্রিম লোডের জন্য ১০ সেকেন্ড
+          validateStatus: () => true,
+        });
+        if (res.status === 429) {
+          throw new MovieBoxPlaybackLimitError("MovieBox is temporarily rate limiting playback. Please try again later.");
+        }
+        if (res.status === 406) return { noContent: true };
+        
+        if (res.status < 200 || res.status >= 300) {
+          console.warn(`[movieBoxWeb] Play API HTTP ${res.status} for ${playUrl} (Attempt ${attempt})`);
+          if (attempt === MAX_RETRIES) return null;
+          await new Promise((r) => setTimeout(r, 500)); // ৫০০ms ওয়েট করে রিট্রাই
+          continue;
+        }
+        
+        const json = res.data;
+        checkPlaybackLimit(json);
+        if (json?.code === 406 || json?.message?.includes("find no content")) {
+          return { noContent: true };
+        }
+        return json;
+      }
+
+      const response = await fetch(playUrl, { headers, signal });
+      if (response.status === 429) {
         throw new MovieBoxPlaybackLimitError("MovieBox is temporarily rate limiting playback. Please try again later.");
       }
-      if (res.status === 406) return { noContent: true };
-      if (res.status < 200 || res.status >= 300) {
-        console.warn(`[movieBoxWeb] Play API HTTP ${res.status} for ${playUrl}`);
-        return null;
+      if (response.status === 406) return { noContent: true };
+      
+      if (!response.ok) {
+        console.warn(`[movieBoxWeb] Play API HTTP ${response.status} for ${playUrl} (Attempt ${attempt})`);
+        if (attempt === MAX_RETRIES) return null;
+        await new Promise((r) => setTimeout(r, 500));
+        continue;
       }
-      const json = res.data;
+      
+      const json = await response.json();
       checkPlaybackLimit(json);
       if (json?.code === 406 || json?.message?.includes("find no content")) {
         return { noContent: true };
       }
       return json;
+      
+    } catch (err: any) {
+      if (err instanceof MovieBoxPlaybackLimitError) throw err;
+      if (signal?.aborted) return null; // ইউজার ক্যানসেল করলে থামে
+      console.warn(`[movieBoxWeb] Play API fetch error for ${playUrl} (Attempt ${attempt}):`, err?.message || err);
+      if (attempt === MAX_RETRIES) return null;
+      await new Promise((r) => setTimeout(r, 500));
     }
-
-    const response = await fetch(playUrl, {
-      headers,
-      signal,
-    });
-    if (response.status === 429) {
-      throw new MovieBoxPlaybackLimitError("MovieBox is temporarily rate limiting playback. Please try again later.");
-    }
-    if (response.status === 406) {
-      return { noContent: true };
-    }
-    if (!response.ok) {
-      console.warn(`[movieBoxWeb] Play API HTTP ${response.status} for ${playUrl}`);
-      return null;
-    }
-    const json = await response.json();
-    checkPlaybackLimit(json);
-    if (json?.code === 406 || json?.message?.includes("find no content")) {
-      return { noContent: true };
-    }
-    return json;
-  } catch (err: any) {
-    if (err instanceof MovieBoxPlaybackLimitError) throw err;
-    console.warn(`[movieBoxWeb] Play API fetch error for ${playUrl}:`, err?.message || err);
-    return null;
   }
+  return null;
 }
 
 export const getStream = async function ({
@@ -291,7 +303,6 @@ export const getStream = async function ({
       signal,
     );
 
-    // If no playable streams found and fallback subjectId/detailPath is available, try fallback
     if (
       !hasPlayableStreams(playResult) &&
       (playback.fallbackSubjectId || playback.fallbackDetailPath)
@@ -330,7 +341,6 @@ export const getStream = async function ({
       }
     }
 
-    // If still no playable streams, try without se/ep
     if (!hasPlayableStreams(playResult)) {
       const cleanParams = new URLSearchParams({
         subjectId: playback.subjectId,
@@ -377,25 +387,56 @@ export const getStream = async function ({
     );
 
     console.log("MovieBox Web stream sources", availableSources);
-    const streams = await Promise.all(
-      availableSources.map(async (source) => ({
-        server:
-          `${playback.language} ${source.resolutions || source.format || ""}`.trim(),
-        link: source.url || "",
-        type: getStreamType(source.format, source.url),
-        quality: getQuality(source.resolutions),
-        subtitles: await getCaptions(
-          baseUrl,
-          playback,
-          source,
-          referer,
-          userAgent,
-          providerContext,
-          signal,
-        ),
-        headers: streamHeaders,
-      })),
-    );
+
+    // --- Optimized Link Validation using GET Range (1 Byte) ---
+    const streams = (
+      await Promise.all(
+        availableSources.map(async (source) => {
+          let isAlive = true;
+          try {
+            const check = await fetch(source.url!, {
+              method: "GET",
+              headers: { Range: "bytes=0-0", "User-Agent": userAgent },
+              signal,
+            });
+            // 200 (OK), 206 (Partial Content), or 403 (Forbidden) means link is alive
+            if (!check.ok && check.status !== 206 && check.status !== 403) {
+              isAlive = false;
+            }
+          } catch (e) {
+            isAlive = false;
+          }
+
+          if (!isAlive) {
+            console.warn(`[movieBoxWeb] Dead stream link skipped: ${source.url}`);
+            return null;
+          }
+
+          return {
+            server: `${playback.language} ${source.resolutions || source.format || ""}`.trim(),
+            link: source.url || "",
+            type: getStreamType(source.format, source.url),
+            quality: getQuality(source.resolutions),
+            subtitles: await getCaptions(
+              baseUrl,
+              playback,
+              source,
+              referer,
+              userAgent,
+              providerContext,
+              signal,
+            ),
+            headers: streamHeaders,
+          };
+        })
+      )
+    ).filter(Boolean) as Stream[];
+
+    if (streams.length === 0) {
+      console.warn("[movieBoxWeb] All streams were dead or filtered out.");
+      return [];
+    }
+
     if (isDownload) {
       const preferred = await providerContext.kvStore?.get<string>("downloadQuality");
       const target = preferred === "highest" || !preferred ? 0 : Number(preferred);
