@@ -139,7 +139,8 @@ function decodeNuxtData(values: unknown): unknown {
     const result: Record<string, unknown> = {};
     hydrated[index] = result;
     for (const [key, item] of Object.entries(value)) {
-      if (key === "__proto__") throw new Error("Invalid Nuxt data key");
+      // সিকিউরিটি ফিক্স: __proto__ কী থাকলে অ্যাপ ক্র্যাশ করবে না, বরং স্কিপ করবে
+      if (key === "__proto__") continue;
       result[key] = hydrate(item);
     }
     return result;
@@ -167,41 +168,64 @@ function findDetail(value: unknown): MovieBoxDetail | null {
 }
 
 export function encodeLink(value: PlaybackLink): string {
-  return JSON.stringify(value);
+  try {
+    return JSON.stringify(value);
+  } catch {
+    return "";
+  }
 }
 
-export function decodeLink(value: string): PlaybackLink {
-  if (value && typeof value === "object") {
+export function decodeLink(value: string | object): PlaybackLink {
+  if (value && typeof value === "object" && !Array.isArray(value)) {
     return value as PlaybackLink;
   }
+  
+  const stringValue = String(value || "");
+  
   try {
-    return JSON.parse(value) as PlaybackLink;
+    const parsed = JSON.parse(stringValue);
+    if (parsed && typeof parsed === "object") {
+      return parsed as PlaybackLink;
+    }
   } catch {
-    const dp = detailPath(String(value || ""));
-    return {
-      subjectId: "",
-      detailPath: dp,
-      language: "Original",
-      season: 1,
-      episode: 1,
-    };
+    // Fallback to default below
   }
+
+  return {
+    subjectId: "",
+    detailPath: detailPath(stringValue),
+    language: "Original",
+    season: 1,
+    episode: 1,
+  };
 }
 
 export function detailPath(link: string): string {
-  return link.replace(/^https?:\/\/[^/]+/, "").replace(/^\/moviesDetail\//, "");
+  if (!link) return "";
+  return link.replace(/^https?:\/\/[^/]+/, "").replace(/^\/moviesDetail\//, "").replace(/^\//, "");
 }
 
 export function absoluteUrl(baseUrl: string, path: string): string {
-  return new URL(path, `${baseUrl}/`).toString();
+  try {
+    return new URL(path, `${baseUrl}/`).toString();
+  } catch {
+    // পুরোনো ব্রাউজার বা টিভির জন্য ফলব্যাক
+    const cleanBase = baseUrl.replace(/\/$/, "");
+    const cleanPath = path.replace(/^\//, "");
+    return `${cleanBase}/${cleanPath}`;
+  }
 }
 
 // Bound CDN artwork before download and decoding, including oversized originals.
 export function posterUrl(value: string | undefined, width = 600): string {
   if (!value) return "";
   try {
+    // URL ভ্যালিডেশন
+    if (typeof value !== "string" || !value.startsWith("http")) return value;
+    
     const url = new URL(value);
     if (!url.hostname.endsWith(".aoneroom.com")) return value;
+    
     url.searchParams.set("x-oss-process", `image/resize,w_${width},limit_1`);
     return url.toString();
   } catch {
