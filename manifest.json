@@ -1,27 +1,31 @@
-[
-  {
-    "display_name": "MovieBox App",
-    "value": "movieBox",
-    "version": "2.5",
-    "icon": "",
-    "type": "global",
-    "disabled": true
-  },
-  {
-    "display_name": "MovieBox Web",
-    "value": "movieBoxWeb",
-    "version": "2.7",
-    "hasSettings": true,
-    "icon": "https://cdn.jsdelivr.net/gh/Zenda-Cross/vega-providers@main/assets/movieBoxWeb.png",
-    "type": "global",
-    "disabled": false
-  },
-  {
-    "display_name": "Castle TV",
-    "value": "castle",
-    "version": "1.0",
-    "icon": "https://cdn.jsdelivr.net/gh/Zenda-Cross/vega-providers@main/assets/castle.png",
-    "type": "global",
-    "disabled": false
-  }
-]
+{
+  "name": "kalonjemes2220 Providers",
+  "author": "kalonjemes2220",
+  "providers": [
+    {
+      "display_name": "MovieBox App",
+      "value": "movieBox",
+      "version": "2.5",
+      "icon": "",
+      "type": "global",
+      "disabled": true
+    },
+    {
+      "display_name": "MovieBox Web",
+      "value": "movieBoxWeb",
+      "version": "2.7",
+      "hasSettings": true,
+      "icon": "https://cdn.jsdelivr.net/gh/Zenda-Cross/vega-providers@main/assets/movieBoxWeb.png",
+      "type": "global",
+      "disabled": false
+    },
+    {
+      "display_name": "Castle TV",
+      "value": "castle",
+      "version": "1.0",
+      "icon": "https://cdn.jsdelivr.net/gh/Zenda-Cross/vega-providers@main/assets/castle.png",
+      "type": "global",
+      "disabled": false
+    }
+  ]
+}
