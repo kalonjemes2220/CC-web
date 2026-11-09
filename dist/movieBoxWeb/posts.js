@@ -41,7 +41,7 @@ var __defProp = Object.defineProperty,
 
 __export(posts_exports, { getPosts: () => getPosts, getSearchPosts: () => getSearchPosts });
 
-// এখানে API ডোমেইনটি সেট করা হলো
+// API ডোমেইন
 var defaultBaseUrl = "https://h5-api.aoneroom.com";
 
 function getProviderBaseUrl() {
@@ -120,12 +120,15 @@ __name(getProviderBaseUrl, "getProviderBaseUrl"),
   __name(absoluteUrl, "absoluteUrl"),
   __name(posterUrl, "posterUrl");
 
-var pageSize = 18,
-  requestHeaders = {
-    Accept: "application/json",
-    "x-client-info": JSON.stringify({ timezone: "Asia/Colombo" }),
-    "x-source": "",
-  };
+var pageSize = 18;
+
+// আপনার ডেভটুলস থেকে পাওয়া x-user টোকেন এখানে যুক্ত করা হয়েছে
+var requestHeaders = {
+  Accept: "application/json",
+  "x-client-info": JSON.stringify({ timezone: "Asia/Colombo" }),
+  "x-source": "",
+  "x-user": '{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjU5MTQ3NDAyMjM4OTY0NDYzNjgsImV4cCI6MTc2NTQ1NzM3MSwiaWF0IjoxNzY0NzY2MTcxfQ.0z9pxxxdooy4aHzkar-GoPfL_QB-zuD5KQqfgCAHRA","userId":"5914740223896446368","userType":0,"appType":3}'
+};
 
 function collectSubjectPreviews(value) {
   const subjects = new Map(),
@@ -149,7 +152,7 @@ function collectSubjectPreviews(value) {
 function fetchPosts(path, signal, providerContext) {
   return __async(this, null, function* () {
     const baseUrl = yield getProviderBaseUrl(),
-      response = yield fetch(absoluteUrl(baseUrl, path), { signal: signal });
+      response = yield fetch(absoluteUrl(baseUrl, path), { signal: signal, headers: requestHeaders });
     if (!response.ok) throw new Error(`MovieBox Web returned ${response.status}`);
     const html = yield response.text(),
       $ = providerContext.cheerio.load(html),
