@@ -41,7 +41,7 @@ var __defProp = Object.defineProperty,
 
 __export(posts_exports, { getPosts: () => getPosts, getSearchPosts: () => getSearchPosts });
 
-// API ডোমেইন
+// ১. আসল API ডোমেইন
 var defaultBaseUrl = "https://h5-api.aoneroom.com";
 
 function getProviderBaseUrl() {
@@ -122,12 +122,12 @@ __name(getProviderBaseUrl, "getProviderBaseUrl"),
 
 var pageSize = 18;
 
-// আপনার ডেভটুলস থেকে পাওয়া x-user টোকেন এখানে যুক্ত করা হয়েছে
+// ২. আপনার নতুন x-user টোকেন এবং High Risk বাইপাস হেডার যুক্ত করা হলো
 var requestHeaders = {
-  Accept: "application/json",
-  "x-client-info": JSON.stringify({ timezone: "Asia/Colombo" }),
-  "x-source": "",
-  "x-user": '{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjU5MTQ3NDAyMjM4OTY0NDYzNjgsImV4cCI6MTc2NTQ1NzM3MSwiaWF0IjoxNzY0NzY2MTcxfQ.0z9pxxxdooy4aHzkar-GoPfL_QB-zuD5KQqfgCAHRA","userId":"5914740223896446368","userType":0,"appType":3}'
+  accept: "application/json",
+  "x-client-info": JSON.stringify({ timezone: "Asia/Dhaka" }),
+  "x-no-high-risk-restrict": "0",
+  "x-user": '{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjg4NTQ2ODQ4NTMzMjEzMjAwOCwiYXRwIjozLCJleHQiOiIxNzk0MjI0OTg1IiwiZXhwIjoxODAyMDAwOTg1LCJpYXQiOjE3OTQyMjQ2ODV9.fRu9guvkFP7rfFu1BDNWtfHTEu7QrNvmoJtgtepzJF0","userId":"885468485332132008","userType":0,"appType":3}'
 };
 
 function collectSubjectPreviews(value) {
